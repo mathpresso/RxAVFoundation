@@ -16,6 +16,12 @@ import RxCocoa
 @available(iOS 10.0, *)
 extension Reactive where Base: AVCaptureSession {
     
+    public var sessionScheduler: SerialDispatchQueueScheduler { Scheduler.session }
+  
+    public var sessionQueue: DispatchQueue { Queue.session }
+  
+    public var dataOutPutQueue: DispatchQueue { Queue.dataOutput }
+  
     public func configure(preset: AVCaptureSession.Preset = .photo, captureDevice: AVCaptureDevice) {
         self.configure { session in
             session.sessionPreset = preset
