@@ -22,13 +22,27 @@ extension Reactive where Base: AVCaptureSession {
   
     public var dataOutPutQueue: DispatchQueue { Queue.dataOutput }
   
-    public func configure(preset: AVCaptureSession.Preset = .photo, captureDevice: AVCaptureDevice) {
-        self.configure { session in
+    public func configure(
+      preset: AVCaptureSession.Preset = .high,
+      captureDevice: AVCaptureDevice
+    ) {
+      configure { session in
+        do {
+          if session.canSetSessionPreset(preset) {
             session.sessionPreset = preset
-            let deviceInput = try! AVCaptureDeviceInput(device: captureDevice)
+          }
+          
+          let deviceInput = try AVCaptureDeviceInput(device: captureDevice)
+          
+          if base.canAddInput(deviceInput) {
             session.addInput(deviceInput)
+          }
+        } catch {
+          print("error: \(error.localizedDescription)")
         }
+      }
     }
+    
     
     public func startRunning() {
         Queue.session.async {
@@ -110,24 +124,23 @@ extension Reactive where Base: AVCaptureSession {
         let videoOutput = AVCaptureVideoDataOutput()
         let videoCaptureDelegate = RxAVCaptureVideoDataOutputSampleBufferDelegate()
         let videoCaptureOutput: Observable<VideoCaptureOutput> = Observable
-            .create { observer in
-                videoCaptureDelegate.observer = observer
-                
-                self.configure { session in
-                    videoOutput.videoSettings = settings
-                    videoOutput.setSampleBufferDelegate(videoCaptureDelegate, queue: Queue.dataOutput)
-                    session.addOutput(videoOutput)
-                    videoOutput.connections.first?.videoOrientation = orientation
-                }
-                
-                return Disposables.create {
-                    self.configure { session in
-                        session.removeOutput(videoOutput)
-                    }
-                }
+          .create { observer in
+            videoCaptureDelegate.observer = observer
+            self.configure { session in
+              videoOutput.videoSettings = settings
+              videoOutput.alwaysDiscardsLateVideoFrames = true
+              videoOutput.setSampleBufferDelegate(videoCaptureDelegate, queue: Queue.dataOutput)
+              videoOutput.connection(with: .video)
+              session.addOutput(videoOutput)
             }
-            .subscribeOn(Scheduler.session)
-        //            .observeOn(Scheduler.dataOutput)
+            
+            return Disposables.create {
+              self.configure { session in
+                session.removeOutput(videoOutput)
+              }
+            }
+        }
+        .subscribeOn(Scheduler.session)
         return videoCaptureOutput
     }
     
