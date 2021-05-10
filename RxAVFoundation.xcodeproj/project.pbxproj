@@ -149,7 +149,6 @@
 				94DF2742215CA8A300051F68 /* Sources */,
 				94DF2743215CA8A300051F68 /* Frameworks */,
 				94DF2744215CA8A300051F68 /* Resources */,
-				94DF2762215CAA4F00051F68 /* Carthage */,
 				94DF2763215CAA5200051F68 /* Delete Nested Framework(s) */,
 			);
 			buildRules = (
@@ -235,25 +234,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		94DF2762215CAA4F00051F68 /* Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
-			);
-			name = Carthage;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
-		};
 		94DF2763215CAA5200051F68 /* Delete Nested Framework(s) */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
