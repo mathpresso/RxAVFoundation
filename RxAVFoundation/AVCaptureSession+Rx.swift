@@ -81,7 +81,7 @@ extension Reactive where Base: AVCaptureSession {
                     }
                 }
             }
-            .subscribeOn(Scheduler.session)
+          .subscribe(on: Scheduler.session)
         //            .observeOn(Scheduler.dataOutput)
         return metadataCaptureOutput
     }
@@ -115,7 +115,7 @@ extension Reactive where Base: AVCaptureSession {
                     }
                 }
             }
-            .subscribeOn(Scheduler.session)
+          .subscribe(on: Scheduler.session)
         //            .observeOn(Scheduler.dataOutput)
         return photoCaptureOutput
     }
@@ -140,7 +140,7 @@ extension Reactive where Base: AVCaptureSession {
               }
             }
         }
-        .subscribeOn(Scheduler.session)
+          .subscribe(on: Scheduler.session)
         return videoCaptureOutput
     }
     
@@ -175,7 +175,7 @@ extension Reactive where Base: AVCaptureSession {
                     }
                 }
             }
-            .subscribeOn(Scheduler.session)
+          .subscribe(on: Scheduler.session)
         //            .observeOn(Scheduler.dataOutput)
         return depthCaptureOutput
     }
@@ -196,7 +196,7 @@ extension Reactive where Base: AVCaptureSession {
                     // NOOP
                 }
             }
-            .subscribeOn(Scheduler.session)
+          .subscribe(on: Scheduler.session)
         //            .observeOn(Scheduler.dataOutput)
         return synchronizerOutput
     }
@@ -208,7 +208,7 @@ extension Reactive where Base: AVCaptureSession {
                     observer(.success(self.base.outputs))
                     return Disposables.create()
                 }
-                .subscribeOn(Scheduler.session)
+              .subscribe(on: Scheduler.session)
         }
     }
     
